@@ -1,5 +1,7 @@
 package com.roervik.tdt4100.gameproject.gfx;
 
+import com.roervik.tdt4100.gameproject.shaders.ShaderException;
+
 import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
 import static org.lwjgl.opengl.GL20.GL_LINK_STATUS;
@@ -20,7 +22,7 @@ import static org.lwjgl.opengl.GL20.glValidateProgram;
 public class ShaderProgram {
     private final int programId;
 
-    public ShaderProgram(final String vertexSource, final String fragmentSource) {
+    public ShaderProgram(final String vertexSource, final String fragmentSource) throws ShaderException {
         programId = glCreateProgram();
         enable();
         createShader(vertexSource, GL_VERTEX_SHADER);
@@ -28,17 +30,17 @@ public class ShaderProgram {
         link();
     }
 
-    private int createShader(String shaderCode, int shaderType)  {
+    private int createShader(String shaderCode, int shaderType) throws ShaderException {
         final int shaderId = glCreateShader(shaderType);
         if (shaderId == 0) {
-            throw new RuntimeException("Error creating shader. Code: " + shaderId);
+            throw new ShaderException("Error creating shader.");
         }
 
         glShaderSource(shaderId, shaderCode);
         glCompileShader(shaderId);
 
         if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
-            throw new RuntimeException("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
+            throw new ShaderException("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
         }
 
         glAttachShader(programId, shaderId);
@@ -46,15 +48,15 @@ public class ShaderProgram {
         return shaderId;
     }
 
-    private void link()  {
+    private void link() throws ShaderException {
         glLinkProgram(programId);
         if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
-            throw new RuntimeException("Error linking Shader code: " + glGetShaderInfoLog(programId, 1024));
+            throw new ShaderException("Error linking Shader code: " + glGetShaderInfoLog(programId, 1024));
         }
 
         glValidateProgram(programId);
         if (glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) {
-            throw new RuntimeException("Error validating Shader code: " + glGetShaderInfoLog(programId, 1024));
+            throw new ShaderException("Error validating Shader code: " + glGetShaderInfoLog(programId, 1024));
         }
     }
 
