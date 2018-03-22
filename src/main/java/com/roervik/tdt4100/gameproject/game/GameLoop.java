@@ -5,7 +5,7 @@ public class GameLoop implements Runnable {
     private boolean running;
     private Thread thread;
 
-    public GameLoop(GameLogicComponent gameLogicComponent) {
+    public GameLoop(final GameLogicComponent gameLogicComponent) {
         this.gameLogicComponent = gameLogicComponent;
         gameLogicComponent.init();
     }
@@ -28,12 +28,12 @@ public class GameLoop implements Runnable {
     public void run() {
         long lastTime = System.nanoTime();
         double delta = 0.0;
-        double ns = 1000000000.0 / gameLogicComponent.getUpdateRate();
+        final double ns = 1000000000.0 / gameLogicComponent.getUpdateRate();
         long timer = System.currentTimeMillis();
         int updates = 0;
         int frames = 0;
         while (running) {
-            long now = System.nanoTime();
+            final long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
             if (delta >= 1.0) {
