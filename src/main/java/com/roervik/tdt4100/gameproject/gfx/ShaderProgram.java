@@ -40,7 +40,7 @@ public class ShaderProgram {
         glCompileShader(shaderId);
 
         if (glGetShaderi(shaderId, GL_COMPILE_STATUS) == 0) {
-            throw new ShaderException("Error compiling Shader code: " + glGetShaderInfoLog(shaderId, 1024));
+            throw new ShaderException("Error compiling Shader code:\n" + shaderCode + "\n"  + glGetShaderInfoLog(shaderId, 1024));
         }
 
         glAttachShader(programId, shaderId);

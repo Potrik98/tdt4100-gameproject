@@ -12,6 +12,7 @@ public class FileUtils {
         String line;
         while ((line = reader.readLine()) != null) {
             out.append(line);
+            out.append("\n");
         }
         return out.toString();
     }
