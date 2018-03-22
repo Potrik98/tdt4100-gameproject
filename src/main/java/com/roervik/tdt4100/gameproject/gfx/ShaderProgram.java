@@ -20,7 +20,7 @@ import static org.lwjgl.opengl.GL20.glValidateProgram;
 public class ShaderProgram {
     private final int programId;
 
-    public ShaderProgram(String vertexSource, String fragmentSource) {
+    public ShaderProgram(final String vertexSource, final String fragmentSource) {
         programId = glCreateProgram();
         enable();
         createShader(vertexSource, GL_VERTEX_SHADER);
@@ -29,7 +29,7 @@ public class ShaderProgram {
     }
 
     private int createShader(String shaderCode, int shaderType)  {
-        int shaderId = glCreateShader(shaderType);
+        final int shaderId = glCreateShader(shaderType);
         if (shaderId == 0) {
             throw new RuntimeException("Error creating shader. Code: " + shaderId);
         }
