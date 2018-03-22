@@ -26,6 +26,7 @@ public class GameLoop implements Runnable {
     }
 
     public void run() {
+        gameLogicComponent.init();
         long lastTime = System.nanoTime();
         double delta = 0.0;
         final double ns = 1000000000.0 / gameLogicComponent.getUpdateRate();
@@ -48,6 +49,9 @@ public class GameLoop implements Runnable {
                 System.out.println(updates + " ups, " + frames + " fps");
                 updates = 0;
                 frames = 0;
+                if (gameLogicComponent.shouldStop()) {
+                    stop();
+                }
             }
         }
     }

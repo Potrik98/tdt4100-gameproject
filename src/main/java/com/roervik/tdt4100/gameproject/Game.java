@@ -2,6 +2,9 @@ package com.roervik.tdt4100.gameproject;
 
 import com.roervik.tdt4100.gameproject.game.GameLogicComponent;
 import com.roervik.tdt4100.gameproject.game.GameLoop;
+import com.roervik.tdt4100.gameproject.gfx.Window;
+
+import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class Game implements GameLogicComponent {
     private static final String title = "GameProject v1.0";
@@ -9,8 +12,16 @@ public class Game implements GameLogicComponent {
     private static final int height = 600;
     private static final int updateRate = 60;
 
-    public void init() {
+    private final Window window;
 
+    public Game() {
+        window = new Window(title, width, height);
+    }
+
+    public void init() {
+        window.init();
+
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
     public void update() {
@@ -18,7 +29,13 @@ public class Game implements GameLogicComponent {
     }
 
     public void render() {
+        window.clear();
 
+        window.update();
+    }
+
+    public boolean shouldStop() {
+        return window.shouldClose();
     }
 
     public int getUpdateRate() {
@@ -26,7 +43,7 @@ public class Game implements GameLogicComponent {
     }
 
     public static void main(String[] args) {
-        GameLoop gameLoop = new GameLoop(new Game());
+        final GameLoop gameLoop = new GameLoop(new Game());
         gameLoop.start();
     }
 }

@@ -5,4 +5,5 @@ public interface GameLogicComponent {
     void update();
     void render();
     void init();
+    boolean shouldStop();
 }
