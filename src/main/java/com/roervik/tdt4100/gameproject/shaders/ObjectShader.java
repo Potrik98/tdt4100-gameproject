@@ -20,6 +20,14 @@ public class ObjectShader extends ShaderProgram {
         locationModelMatrix = glGetUniformLocation(programId,"model_matrix");
     }
 
+    public ObjectShader(final ShaderProgram shaderProgram) {
+        super(shaderProgram);
+
+        locationProjectionMatrix = glGetUniformLocation(programId,"projection_matrix");
+        locationViewMatrix = glGetUniformLocation(programId,"view_matrix");
+        locationModelMatrix = glGetUniformLocation(programId,"model_matrix");
+    }
+
     private void setUniformMatrix4f(final Matrix4f matrix, final int location) {
         float[] data = new float[16];
         matrix.get(data);
