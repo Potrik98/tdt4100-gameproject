@@ -8,9 +8,11 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 
 public abstract class TestGame implements GameLogicComponent {
     protected final Window window;
+    protected final int width = 800;
+    protected final int height = 600;
 
     protected TestGame() {
-        window = new Window("Test game", 800, 600);
+        window = new Window("Test game", width, height);
     }
 
     public void init() {
