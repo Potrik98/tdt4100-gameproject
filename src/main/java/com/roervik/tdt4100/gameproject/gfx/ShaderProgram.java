@@ -20,7 +20,7 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
 
 public class ShaderProgram {
-    private final int programId;
+    protected final int programId;
 
     public ShaderProgram(final String vertexSource, final String fragmentSource) throws ShaderException {
         programId = glCreateProgram();
