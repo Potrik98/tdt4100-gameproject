@@ -6,7 +6,7 @@ import org.joml.Matrix4f;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
-public class ObjectShader extends ShaderProgram {
+public class ObjectShader extends ShaderProgram implements ProjectableShader {
     private final int locationProjectionMatrix;
     private final int locationViewMatrix;
     private final int locationModelMatrix;
