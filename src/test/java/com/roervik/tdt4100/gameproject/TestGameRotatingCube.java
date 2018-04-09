@@ -9,6 +9,9 @@ import com.roervik.tdt4100.gameproject.shaders.ObjectShader;
 import com.roervik.tdt4100.gameproject.shaders.ShaderLoader;
 import org.joml.Matrix4f;
 
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.glEnable;
+
 public class TestGameRotatingCube extends TestGame {
     private ObjectShader shaderProgram;
     private ModelEntity modelEntity;
@@ -24,6 +27,8 @@ public class TestGameRotatingCube extends TestGame {
 
     public void init() {
         super.init();
+
+        glEnable(GL_DEPTH_TEST);
 
         shaderProgram = new ObjectShader(ShaderLoader.createShaderProgramFromResources(
                 "testShaderObjectVertex.glsl",
@@ -71,6 +76,7 @@ public class TestGameRotatingCube extends TestGame {
                 new VertexBuffer(vertices, 3));
 
         modelEntity = new ModelEntity(vertexArrayObject, shaderProgram);
+        modelEntity.position.z = -5.0f;
     }
 
     public void render() {

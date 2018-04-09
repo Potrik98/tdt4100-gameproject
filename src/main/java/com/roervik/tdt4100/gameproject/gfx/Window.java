@@ -84,8 +84,6 @@ public class Window {
         glfwSwapInterval(0);
         glfwShowWindow(windowHandle);
         GL.createCapabilities();
-
-        glEnable(GL_DEPTH_TEST);
     }
 
     private void resize(int width, int height) {
