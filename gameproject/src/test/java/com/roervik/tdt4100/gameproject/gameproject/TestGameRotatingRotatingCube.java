@@ -7,7 +7,9 @@ import com.roervik.tdt4100.gameproject.core.shaders.ObjectShader;
 import com.roervik.tdt4100.gameproject.core.shaders.ShaderLoader;
 import com.roervik.tdt4100.gameproject.gameproject.object.RotatingCube;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class TestGameRotatingRotatingCube extends TestGame {
     private ObjectShader shaderProgram;
@@ -34,13 +36,31 @@ public class TestGameRotatingRotatingCube extends TestGame {
         final VertexArrayObject vertexArrayObject = OBJLoader.loadModelFromObjFile("models/cube.obj");
 
         rotatingCube = new RotatingCube(vertexArrayObject, shaderProgram);
-        rotatingCube.startRotation(new Vector2f(1, 0));
+        //rotatingCube.startRotation(new Vector2f(0, 1));
         rotatingCube.position.z = -10;
-        rotatingCube.position.x = -5;
     }
 
     public void update() {
         rotatingCube.update();
+
+        if (!rotatingCube.isRotating()) {
+            final int randDir = new java.util.Random().nextInt(4);
+            if (randDir == 0) rotatingCube.startRotation(new Vector2f(0, 1));
+            if (randDir == 1) rotatingCube.startRotation(new Vector2f(0, -1));
+            if (randDir == 2) rotatingCube.startRotation(new Vector2f(1, 0));
+            if (randDir == 3) rotatingCube.startRotation(new Vector2f(-1, 0));
+        }
+
+        /*Vector3f a = new Vector3f();
+        rotatingCube.rotation.getEulerAnglesXYZ(a);
+        Quaternionf q1 = new Quaternionf().rotateX(0.01f);
+        Quaternionf q2 = new Quaternionf().rotateZ(0.01f);
+        Quaternionf q3 = new Quaternionf();
+        q2.rotateLocalX((float) (-Math.PI / 2), q3);
+        if (a.x < Math.PI / 2) {
+            rotatingCube.rotation.mul(q1);
+        }
+        else rotatingCube.rotation.mul(q3);*/
     }
 
     public void render() {

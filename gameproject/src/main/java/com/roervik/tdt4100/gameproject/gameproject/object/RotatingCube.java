@@ -12,7 +12,7 @@ import org.joml.Vector4f;
 
 public class RotatingCube extends ModelEntity {
     private static final float size = 2.0f;
-    private static final float rotationSpeed = 0.02f;
+    private static final float rotationSpeed = 0.01f;
 
     private float rotationProgress;
     private boolean isRotating;
@@ -45,6 +45,10 @@ public class RotatingCube extends ModelEntity {
     public void render() {
         shaderProgram.setModelMatrix(modelMatrix);
         model.render();
+    }
+
+    public boolean isRotating() {
+        return isRotating;
     }
 
     private Quaternionf updateRotation() {
@@ -87,18 +91,27 @@ public class RotatingCube extends ModelEntity {
         final float overShoot = (float) (rotationProgress - Math.PI / 2.0f);
         rotationDirection.div(rotationSpeed);
         rotationDirection.mul(-overShoot);
-        rotation.rotate(rotationDirection.x, rotationDirection.y, rotationDirection.z);
         rotationProgress = 0;
         isRotating = false;
-        return null;
+        return new Quaternionf().rotate(rotationDirection.x, rotationDirection.y, rotationDirection.z);
     }
 
     public void startRotation(final Vector2f direction) {
         isRotating = true;
+        System.out.println("Rotating " + direction);
         final Vector2f xzOffset = direction.normalize().mul(-0.5f * size);
         final Vector3f translation = new Vector3f(xzOffset.x, 0.5f * size, xzOffset.y);
         centerToEdgeTranslation = new Vector4f(translation.x, translation.y, translation.z, 0);
         edgeToCenterTranslation = new Vector4f(-translation.x, -translation.y, -translation.z, 0);
-        rotationDirection = new Vector3f(direction.y, 0, direction.x).mul(rotationSpeed);
+        rotationDirection = new Vector3f(direction.y, 0, direction.x);
+
+        Quaternionf inverseRotation = new Quaternionf();
+        rotation.invert(inverseRotation);
+        centerToEdgeTranslation.rotate(inverseRotation);
+        edgeToCenterTranslation.rotate(inverseRotation);
+
+        rotationDirection.rotate(inverseRotation);
+        rotationDirection = new Vector3f(Math.round(rotationDirection.x), Math.round(rotationDirection.y), Math.round(rotationDirection.z));
+        rotationDirection.mul(rotationSpeed);
     }
 }
