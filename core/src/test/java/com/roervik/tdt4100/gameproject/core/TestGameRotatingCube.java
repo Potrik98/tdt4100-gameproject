@@ -27,8 +27,8 @@ public class TestGameRotatingCube extends TestGame {
         //glEnable(GL_DEPTH_TEST);
 
         shaderProgram = new ObjectShader(ShaderLoader.createShaderProgramFromResources(
-                "testShaderObjectVertex.glsl",
-                "testShaderBasicFragment.glsl"));
+                "shaders/testShaderObjectVertex.glsl",
+                "shaders/testShaderBasicFragment.glsl"));
 
         final VertexArrayObject vertexArrayObject = OBJLoader.loadModelFromObjFile("models/cube.obj");
 

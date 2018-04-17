@@ -10,9 +10,9 @@ public class ShaderLoader {
                                                                  final String fragmentShaderResource) {
         try {
             final String vertexShaderSource = FileUtils.readInputStream(
-                    ShaderLoader.class.getResourceAsStream(vertexShaderResource));
+                    ClassLoader.getSystemClassLoader().getResourceAsStream(vertexShaderResource));
             final String fragmentShaderSource = FileUtils.readInputStream(
-                    ShaderLoader.class.getResourceAsStream(fragmentShaderResource));
+                    ClassLoader.getSystemClassLoader().getResourceAsStream(fragmentShaderResource));
             return new ShaderProgram(vertexShaderSource, fragmentShaderSource);
         } catch (IOException e) {
             System.out.println("Failed to read shader resources.");

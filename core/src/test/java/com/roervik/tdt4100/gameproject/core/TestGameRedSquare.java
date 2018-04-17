@@ -16,8 +16,8 @@ public class TestGameRedSquare extends TestGame {
         super.init();
 
         shaderProgram = ShaderLoader.createShaderProgramFromResources(
-                "testShaderBasicVertex.glsl",
-                "testShaderBasicFragment.glsl");
+                "shaders/testShaderBasicVertex.glsl",
+                "shaders/testShaderBasicFragment.glsl");
 
         final float[] vertices = {
                 -0.5f, -0.5f, 1.0f,
