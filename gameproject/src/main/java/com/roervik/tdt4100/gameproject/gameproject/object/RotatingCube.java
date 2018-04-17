@@ -8,6 +8,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class RotatingCube extends ModelEntity {
     private static final float size = 2.0f;
@@ -18,8 +19,8 @@ public class RotatingCube extends ModelEntity {
     private Vector3f rotationDirection;
     private Matrix4f modelMatrix;
 
-    private Matrix4f centerToEdgeTranslation;
-    private Matrix4f edgeToCenterTranslation;
+    private Vector4f centerToEdgeTranslation;
+    private Vector4f edgeToCenterTranslation;
 
     public RotatingCube(final VertexArrayObject model,
                         final ProjectableShader shaderProgram) {
@@ -27,8 +28,8 @@ public class RotatingCube extends ModelEntity {
 
         rotationProgress = 0.0f;
         isRotating = false;
-        centerToEdgeTranslation = new Matrix4f();
-        edgeToCenterTranslation = new Matrix4f();
+        centerToEdgeTranslation = new Vector4f();
+        edgeToCenterTranslation = new Vector4f();
         modelMatrix = new Matrix4f();
         rotationDirection = new Vector3f();
     }
@@ -48,21 +49,21 @@ public class RotatingCube extends ModelEntity {
     }
 
     private void updateModelMatrix() {
+        modelMatrix = Transformation.getModelMatrix(position, rotation, scale);
         if (isRotating) {
-            final Matrix4f rotationMatrix = new Matrix4f().rotate(rotation);
+            final Quaternionf inverse = new Quaternionf();
+            rotation.invert(inverse);
+            final Matrix4f rotationMatrix = new Matrix4f().rotate(inverse);
 
-            Matrix4f edgeToCenterTransformRotated = new Matrix4f();
-            rotationMatrix.mul(edgeToCenterTranslation, edgeToCenterTransformRotated);
+            Vector4f edgeToCenterTranslationRotated = new Vector4f();
+            edgeToCenterTranslation.mul(rotationMatrix, edgeToCenterTranslationRotated);
 
-            Matrix4f newCenterTransform = new Matrix4f();
-            centerToEdgeTranslation.mul(edgeToCenterTransformRotated, newCenterTransform);
+            Vector4f newCenterTranslation = new Vector4f();
+            centerToEdgeTranslation.mul(edgeToCenterTranslationRotated, newCenterTranslation);
 
-            Vector3f newCenterTranslation = new Vector3f();
-            newCenterTransform.getTranslation(newCenterTranslation);
-
-            modelMatrix = new Matrix4f().translate(newCenterTranslation).mul(Transformation.getModelMatrix(position, rotation, scale));
-        } else {
-            modelMatrix = Transformation.getModelMatrix(position, rotation, scale);
+            modelMatrix = new Matrix4f().translate(
+                    new Vector3f(newCenterTranslation.x, newCenterTranslation.y, newCenterTranslation.z))
+                    .mul(modelMatrix);
         }
     }
 
@@ -70,8 +71,8 @@ public class RotatingCube extends ModelEntity {
         isRotating = true;
         final Vector2f xzOffset = direction.normalize().mul(-0.5f * size);
         final Vector3f translation = new Vector3f(xzOffset.x, 0.5f * size, xzOffset.y);
-        centerToEdgeTranslation = new Matrix4f().translation(translation);
-        edgeToCenterTranslation = new Matrix4f().translation(translation).invert();
+        centerToEdgeTranslation = new Vector4f(translation.x, translation.y, translation.z, 0);
+        edgeToCenterTranslation = new Vector4f(-translation.x, -translation.y, -translation.z, 0);
         rotationDirection = new Vector3f(direction.y, 0, direction.x).mul(rotationSpeed);
     }
 }
