@@ -1,8 +1,6 @@
 package com.roervik.tdt4100.gameproject;
 
-import com.roervik.tdt4100.gameproject.data.IndexBuffer;
 import com.roervik.tdt4100.gameproject.data.VertexArrayObject;
-import com.roervik.tdt4100.gameproject.data.VertexBuffer;
 import com.roervik.tdt4100.gameproject.gfx.ShaderProgram;
 import com.roervik.tdt4100.gameproject.shaders.ShaderLoader;
 

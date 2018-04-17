@@ -7,6 +7,7 @@ import com.roervik.tdt4100.gameproject.math.Transformation;
 import com.roervik.tdt4100.gameproject.shaders.ObjectShader;
 import com.roervik.tdt4100.gameproject.shaders.ShaderLoader;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
 public class TestGameRotatingCube extends TestGame {
     private ObjectShader shaderProgram;
@@ -18,7 +19,7 @@ public class TestGameRotatingCube extends TestGame {
     public TestGameRotatingCube() {
         super();
         viewMatrix = new Matrix4f();
-        projectionMatrix = Transformation.getProjectionMatrix((float) Math.toRadians(70.0f), 4, 3, -0.1f, -100.0f);
+        projectionMatrix = Transformation.getProjectionMatrix((float) Math.toRadians(70.0f), width, height, 0.1f, 100.0f);
     }
 
     public void init() {
@@ -36,9 +37,9 @@ public class TestGameRotatingCube extends TestGame {
     }
 
     public void update() {
-        modelEntity.position.x = (float) (100.0f * Math.sin(System.currentTimeMillis() / 100.0f));
-        modelEntity.position.y = (float) (100.0f * Math.cos(System.currentTimeMillis() / 100.0f));
-        modelEntity.position.z = (float) (100.0f * Math.sin(1.0 + System.currentTimeMillis() / 100.0f));
+        modelEntity.position.z = -10.0f;
+        modelEntity.rotation.rotate(0, 0, 0.01f);
+        modelEntity.rotation.rotate(0, 0.02f, 0);
     }
 
     public void render() {
