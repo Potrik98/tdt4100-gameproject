@@ -36,9 +36,8 @@ public class RotatingCube extends ModelEntity {
 
     @Override
     public void update() {
-        if (isRotating) {
-            rotation.rotate(rotationDirection.x, rotationDirection.y, rotationDirection.z);
-        }
+        final Quaternionf rotationDelta = updateRotation();
+        updatePosition(rotationDelta);
         updateModelMatrix();
     }
 
@@ -48,23 +47,50 @@ public class RotatingCube extends ModelEntity {
         model.render();
     }
 
-    private void updateModelMatrix() {
-        modelMatrix = Transformation.getModelMatrix(position, rotation, scale);
+    private Quaternionf updateRotation() {
         if (isRotating) {
-            final Quaternionf inverse = new Quaternionf();
-            rotation.invert(inverse);
-            final Matrix4f rotationMatrix = new Matrix4f().rotate(inverse);
+            if (rotationProgress >= Math.PI / 2.0f) {
+                return stopRotation();
+            } else {
+                rotationProgress += rotationSpeed;
+                final Quaternionf rotationDelta = new Quaternionf().rotate(rotationDirection.x, rotationDirection.y, rotationDirection.z);
+                rotation.mul(rotationDelta);
+                return rotationDelta;
+            }
+        } else {
+            return new Quaternionf();
+        }
+    }
+
+    private void updatePosition(final Quaternionf rotationDelta) {
+        if (isRotating) {
+            final Matrix4f rotationMatrix = new Matrix4f().rotate(rotationDelta);
 
             Vector4f edgeToCenterTranslationRotated = new Vector4f();
             edgeToCenterTranslation.mul(rotationMatrix, edgeToCenterTranslationRotated);
 
             Vector4f newCenterTranslation = new Vector4f();
-            centerToEdgeTranslation.mul(edgeToCenterTranslationRotated, newCenterTranslation);
+            edgeToCenterTranslationRotated.add(centerToEdgeTranslation, newCenterTranslation);
 
-            modelMatrix = new Matrix4f().translate(
-                    new Vector3f(newCenterTranslation.x, newCenterTranslation.y, newCenterTranslation.z))
-                    .mul(modelMatrix);
+            Vector4f newCenterTransform = new Vector4f();
+            newCenterTranslation.rotate(rotation, newCenterTransform);
+
+            position.add(newCenterTransform.x , newCenterTransform.y, newCenterTransform.z);
         }
+    }
+
+    private void updateModelMatrix() {
+        modelMatrix = Transformation.getModelMatrix(position, rotation, scale);
+    }
+
+    private Quaternionf stopRotation() {
+        final float overShoot = (float) (rotationProgress - Math.PI / 2.0f);
+        rotationDirection.div(rotationSpeed);
+        rotationDirection.mul(-overShoot);
+        rotation.rotate(rotationDirection.x, rotationDirection.y, rotationDirection.z);
+        rotationProgress = 0;
+        isRotating = false;
+        return null;
     }
 
     public void startRotation(final Vector2f direction) {
