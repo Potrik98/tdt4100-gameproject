@@ -2,22 +2,31 @@ package com.roervik.tdt4100.gameproject.gameproject.object;
 
 import com.roervik.tdt4100.gameproject.core.data.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.entity.ModelEntity;
+import com.roervik.tdt4100.gameproject.core.io.input.Controller;
+import com.roervik.tdt4100.gameproject.core.io.input.Input;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
 import com.roervik.tdt4100.gameproject.core.shaders.ProjectableShader;
+import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+
 public class RotatingCube extends ModelEntity {
     private static final float size = 2.0f;
-    private static final float rotationSpeed = 0.01f;
+    private static final float rotationSpeed = 0.02f;
 
     private float rotationProgress;
     private boolean isRotating;
-    private Vector3f rotationDirection;
     private Matrix4f modelMatrix;
+    private Vector3f rotationAxis;
+    private Quaternionf baseRotation;
+    private Vector3f basePosition;
 
     private Vector4f centerToEdgeTranslation;
     private Vector4f edgeToCenterTranslation;
@@ -31,13 +40,16 @@ public class RotatingCube extends ModelEntity {
         centerToEdgeTranslation = new Vector4f();
         edgeToCenterTranslation = new Vector4f();
         modelMatrix = new Matrix4f();
-        rotationDirection = new Vector3f();
+        rotationAxis = new Vector3f();
+        baseRotation = new Quaternionf();
+        basePosition = new Vector3f();
     }
 
     @Override
     public void update() {
-        final Quaternionf rotationDelta = updateRotation();
-        updatePosition(rotationDelta);
+        handleInput();
+        updateRotation();
+        updatePosition();
         updateModelMatrix();
     }
 
@@ -47,28 +59,35 @@ public class RotatingCube extends ModelEntity {
         model.render();
     }
 
+    public void handleInput() {
+        final Input input = Controller.getInput();
+
+        if (!isRotating) {
+            if (input.isKeyPressed(GLFW_KEY_W)) startRotation(new Vector3f(1, 0, 0));
+            if (input.isKeyPressed(GLFW_KEY_A)) startRotation(new Vector3f(0, 0, 1));
+            if (input.isKeyPressed(GLFW_KEY_S)) startRotation(new Vector3f(-1, 0, 0));
+            if (input.isKeyPressed(GLFW_KEY_D)) startRotation(new Vector3f(0, 0, -1));
+        }
+    }
+
     public boolean isRotating() {
         return isRotating;
     }
 
-    private Quaternionf updateRotation() {
+    private void updateRotation() {
         if (isRotating) {
             if (rotationProgress >= Math.PI / 2.0f) {
-                return stopRotation();
+                stopRotation();
             } else {
                 rotationProgress += rotationSpeed;
-                final Quaternionf rotationDelta = new Quaternionf().rotate(rotationDirection.x, rotationDirection.y, rotationDirection.z);
-                rotation.mul(rotationDelta);
-                return rotationDelta;
+                rotation = new Quaternionf(new AxisAngle4f(rotationProgress, rotationAxis)).mul(baseRotation);
             }
-        } else {
-            return new Quaternionf();
         }
     }
 
-    private void updatePosition(final Quaternionf rotationDelta) {
+    private void updatePosition() {
         if (isRotating) {
-            final Matrix4f rotationMatrix = new Matrix4f().rotate(rotationDelta);
+            final Matrix4f rotationMatrix = new Matrix4f().rotate(new AxisAngle4f(rotationProgress, rotationAxis));
 
             Vector4f edgeToCenterTranslationRotated = new Vector4f();
             edgeToCenterTranslation.mul(rotationMatrix, edgeToCenterTranslationRotated);
@@ -78,8 +97,7 @@ public class RotatingCube extends ModelEntity {
 
             Vector4f newCenterTransform = new Vector4f();
             newCenterTranslation.rotate(rotation, newCenterTransform);
-
-            position.add(newCenterTransform.x , newCenterTransform.y, newCenterTransform.z);
+            position = new Vector3f(newCenterTranslation.x, newCenterTranslation.y, newCenterTranslation.z).add(basePosition);
         }
     }
 
@@ -87,31 +105,19 @@ public class RotatingCube extends ModelEntity {
         modelMatrix = Transformation.getModelMatrix(position, rotation, scale);
     }
 
-    private Quaternionf stopRotation() {
-        final float overShoot = (float) (rotationProgress - Math.PI / 2.0f);
-        rotationDirection.div(rotationSpeed);
-        rotationDirection.mul(-overShoot);
+    private void stopRotation() {
+        rotation = new Quaternionf(new AxisAngle4f((float) (Math.PI / 2), rotationAxis)).mul(baseRotation);
         rotationProgress = 0;
         isRotating = false;
-        return new Quaternionf().rotate(rotationDirection.x, rotationDirection.y, rotationDirection.z);
     }
 
-    public void startRotation(final Vector2f direction) {
+    public void startRotation(final Vector3f rotationAxis) {
         isRotating = true;
-        System.out.println("Rotating " + direction);
-        final Vector2f xzOffset = direction.normalize().mul(-0.5f * size);
-        final Vector3f translation = new Vector3f(xzOffset.x, 0.5f * size, xzOffset.y);
+        baseRotation = new Quaternionf(rotation);
+        basePosition = new Vector3f(position);
+        this.rotationAxis = rotationAxis;
+        final Vector3f translation = new Vector3f(rotationAxis.z, 1, -rotationAxis.x).mul(0.5f * size);
         centerToEdgeTranslation = new Vector4f(translation.x, translation.y, translation.z, 0);
         edgeToCenterTranslation = new Vector4f(-translation.x, -translation.y, -translation.z, 0);
-        rotationDirection = new Vector3f(direction.y, 0, direction.x);
-
-        Quaternionf inverseRotation = new Quaternionf();
-        rotation.invert(inverseRotation);
-        centerToEdgeTranslation.rotate(inverseRotation);
-        edgeToCenterTranslation.rotate(inverseRotation);
-
-        rotationDirection.rotate(inverseRotation);
-        rotationDirection = new Vector3f(Math.round(rotationDirection.x), Math.round(rotationDirection.y), Math.round(rotationDirection.z));
-        rotationDirection.mul(rotationSpeed);
     }
 }
