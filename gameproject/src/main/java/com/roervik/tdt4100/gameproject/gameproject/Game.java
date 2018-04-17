@@ -1,4 +1,4 @@
-package com.roervik.tdt4100.gameproject.core;
+package com.roervik.tdt4100.gameproject.gameproject;
 
 import com.roervik.tdt4100.gameproject.core.gfx.Window;
 import com.roervik.tdt4100.gameproject.core.game.GameLogicComponent;
