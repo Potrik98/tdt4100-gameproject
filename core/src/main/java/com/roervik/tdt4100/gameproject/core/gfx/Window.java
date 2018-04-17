@@ -92,6 +92,10 @@ public class Window {
         this.resized = true;
     }
 
+    public long getWindowHandle() {
+        return windowHandle;
+    }
+
     public void update() {
         glfwSwapBuffers(windowHandle);
         glfwPollEvents();
