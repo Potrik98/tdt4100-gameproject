@@ -87,6 +87,8 @@ public class Window {
     }
 
     private void resize(int width, int height) {
+        this.width = width;
+        this.height = height;
         this.resized = true;
     }
 

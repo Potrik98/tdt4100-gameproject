@@ -33,9 +33,10 @@ public class TestGameRedSquare extends TestGame {
                 2, 3, 0
         };
 
-        vertexArrayObject = new VertexArrayObject(
-                new IndexBuffer(indices),
-                new VertexBuffer(vertices, 3));
+        vertexArrayObject = VertexArrayObject.builder()
+                .indexBuffer(indices)
+                .vertexBuffer(vertices, 3, 0)
+                .build();
     }
 
     public void render() {
