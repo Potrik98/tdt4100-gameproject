@@ -1,5 +1,6 @@
 package com.roervik.tdt4100.gameproject.gameproject;
 
+import com.roervik.tdt4100.gameproject.core.data.texture.Texture;
 import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.io.file.OBJLoader;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
@@ -7,6 +8,9 @@ import com.roervik.tdt4100.gameproject.core.gfx.shaders.ObjectShader;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.ShaderLoader;
 import com.roervik.tdt4100.gameproject.gameproject.object.RotatingCube;
 import org.joml.Matrix4f;
+
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.glEnable;
 
 public class TestGameRotatingRotatingCube extends TestGame {
     private ObjectShader shaderProgram;
@@ -24,7 +28,7 @@ public class TestGameRotatingRotatingCube extends TestGame {
     public void init() {
         super.init();
 
-        //glEnable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
 
         shaderProgram = new ObjectShader(ShaderLoader.createShaderProgramFromResources(
                 "shaders/ObjectVertex.glsl",
@@ -32,7 +36,7 @@ public class TestGameRotatingRotatingCube extends TestGame {
 
         final VertexArrayObject vertexArrayObject = OBJLoader.loadModelFromObjFile("models/cube.obj");
 
-        rotatingCube = new RotatingCube(vertexArrayObject, shaderProgram);
+        rotatingCube = new RotatingCube(vertexArrayObject, Texture.fromResource("textures/scales.png"), shaderProgram);
         rotatingCube.position.z = -10;
     }
 

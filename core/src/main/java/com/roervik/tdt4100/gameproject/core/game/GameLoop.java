@@ -13,9 +13,10 @@ public class GameLoop implements Runnable {
     public void stop() {
         running = false;
         try {
-            thread.join();
+            thread.join(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
     }
 

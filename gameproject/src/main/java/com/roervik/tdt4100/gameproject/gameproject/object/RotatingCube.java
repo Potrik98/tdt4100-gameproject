@@ -1,7 +1,9 @@
 package com.roervik.tdt4100.gameproject.gameproject.object;
 
+import com.roervik.tdt4100.gameproject.core.data.texture.Texture;
 import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.entity.ModelEntity;
+import com.roervik.tdt4100.gameproject.core.entity.TexturedEntity;
 import com.roervik.tdt4100.gameproject.core.io.input.Controller;
 import com.roervik.tdt4100.gameproject.core.io.input.Input;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
@@ -17,7 +19,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 
-public class RotatingCube extends ModelEntity {
+public class RotatingCube extends TexturedEntity {
     private static final float size = 2.0f;
     private static final float rotationSpeed = 0.02f;
 
@@ -32,8 +34,9 @@ public class RotatingCube extends ModelEntity {
     private Vector4f edgeToCenterTranslation;
 
     public RotatingCube(final VertexArrayObject model,
+                        final Texture texture,
                         final ProjectableShader shaderProgram) {
-        super(model, shaderProgram);
+        super(model, texture, shaderProgram);
 
         rotationProgress = 0.0f;
         isRotating = false;
@@ -55,6 +58,7 @@ public class RotatingCube extends ModelEntity {
 
     @Override
     public void render() {
+        texture.bind();
         shaderProgram.setModelMatrix(modelMatrix);
         model.render();
     }
