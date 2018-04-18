@@ -25,8 +25,6 @@ public class RotatingCube extends TexturedEntity {
     private Vector4f centerToEdgeTranslation;
     private Vector4f edgeToCenterTranslation;
 
-    private int tileX, tileZ;
-
     public RotatingCube(final VertexArrayObject model,
                         final Texture texture,
                         final ProjectableShader shaderProgram) {
@@ -40,7 +38,6 @@ public class RotatingCube extends TexturedEntity {
         rotationAxis = new Vector3f();
         baseRotation = new Quaternionf();
         basePosition = new Vector3f();
-        tileX = 0; tileZ = 0;
     }
 
     @Override

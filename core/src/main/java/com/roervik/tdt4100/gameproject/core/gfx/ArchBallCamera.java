@@ -1,6 +1,5 @@
-package com.roervik.tdt4100.gameproject.core.gfx.shaders;
+package com.roervik.tdt4100.gameproject.core.gfx;
 
-import com.roervik.tdt4100.gameproject.core.gfx.Camera;
 import com.roervik.tdt4100.gameproject.core.io.input.Controller;
 import com.roervik.tdt4100.gameproject.core.io.input.Input;
 import org.joml.Vector2f;

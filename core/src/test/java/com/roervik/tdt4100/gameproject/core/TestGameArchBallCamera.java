@@ -3,7 +3,7 @@ package com.roervik.tdt4100.gameproject.core;
 import com.roervik.tdt4100.gameproject.core.data.texture.Texture;
 import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.entity.TexturedEntity;
-import com.roervik.tdt4100.gameproject.core.gfx.shaders.ArchBallCamera;
+import com.roervik.tdt4100.gameproject.core.gfx.ArchBallCamera;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.ObjectShader;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.ShaderLoader;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.TexturedShader;

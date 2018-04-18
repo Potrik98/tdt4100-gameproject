@@ -1,11 +1,12 @@
 package com.roervik.tdt4100.gameproject.gameproject;
 
+import com.roervik.tdt4100.gameproject.core.data.texture.CubeMap;
 import com.roervik.tdt4100.gameproject.core.data.texture.Texture;
 import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.game.GameLogicComponent;
 import com.roervik.tdt4100.gameproject.core.game.GameLoop;
 import com.roervik.tdt4100.gameproject.core.gfx.Window;
-import com.roervik.tdt4100.gameproject.core.gfx.shaders.ArchBallCamera;
+import com.roervik.tdt4100.gameproject.core.gfx.ArchBallCamera;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.ShaderLoader;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.TexturedShader;
 import com.roervik.tdt4100.gameproject.core.io.file.OBJLoader;
@@ -32,6 +33,7 @@ public class Game implements GameLogicComponent {
     private final Window window;
 
     private TexturedShader shaderProgram;
+    private TexturedShader cubeMapShader;
     private RotatingCube rotatingCube;
 
     private Matrix4f projectionMatrix;
@@ -56,6 +58,11 @@ public class Game implements GameLogicComponent {
                 "shaders/TexturedVertexShader.glsl",
                 "shaders/TexturedFragmentShader.glsl"));
 
+        cubeMapShader = new TexturedShader(ShaderLoader.createShaderProgramFromResources(
+                "shaders/CubemapVertexShader.glsl",
+                "shaders/CubemapFragmentShader.glsl"
+        ));
+
         boardMap = MapBuilder.ofResource("maps/map1.txt")
                 .withShader(shaderProgram)
                 .withTexture(Texture.fromResource("textures/ground.png"))
@@ -63,7 +70,14 @@ public class Game implements GameLogicComponent {
 
         final VertexArrayObject vertexArrayObject = OBJLoader.loadModelFromObjFile("models/cube.obj");
 
-        rotatingCube = new RotatingCube(vertexArrayObject, Texture.fromResource("textures/scales.png"), shaderProgram);
+        rotatingCube = new RotatingCube(vertexArrayObject, CubeMap.fromResources(
+                "textures/scales.png",
+                "textures/box.png",
+                "textures/box.png",
+                "textures/box.png",
+                "textures/box.png",
+                "textures/box.png"
+        ), cubeMapShader);
         final Vector2f startingPosition = boardMap.getStartingPosition();
         rotatingCube.position = new Vector3f(startingPosition.x, -0.5f, startingPosition.y).mul(RotatingCube.size);
         boardMap.setRotatingCube(rotatingCube);
@@ -80,8 +94,11 @@ public class Game implements GameLogicComponent {
         shaderProgram.enable();
         shaderProgram.setProjectionMatrix(projectionMatrix);
         shaderProgram.setViewMatrix(Transformation.getViewMatrix(camera));
-        rotatingCube.render();
         boardMap.render();
+        cubeMapShader.enable();
+        cubeMapShader.setProjectionMatrix(projectionMatrix);
+        cubeMapShader.setViewMatrix(Transformation.getViewMatrix(camera));
+        rotatingCube.render();
         window.update();
     }
 
