@@ -1,11 +1,11 @@
 package com.roervik.tdt4100.gameproject.gameproject.object;
 
-import com.roervik.tdt4100.gameproject.core.data.VertexArrayObject;
+import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.entity.ModelEntity;
 import com.roervik.tdt4100.gameproject.core.io.input.Controller;
 import com.roervik.tdt4100.gameproject.core.io.input.Input;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
-import com.roervik.tdt4100.gameproject.core.shaders.ProjectableShader;
+import com.roervik.tdt4100.gameproject.core.gfx.shaders.ProjectableShader;
 import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;

@@ -1,4 +1,4 @@
-package com.roervik.tdt4100.gameproject.core.shaders;
+package com.roervik.tdt4100.gameproject.core.gfx.shaders;
 
 import com.roervik.tdt4100.gameproject.core.gfx.ShaderProgram;
 import org.joml.Matrix4f;

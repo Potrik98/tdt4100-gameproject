@@ -1,4 +1,4 @@
-package com.roervik.tdt4100.gameproject.core.data;
+package com.roervik.tdt4100.gameproject.core.data.vertex;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;

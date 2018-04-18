@@ -1,4 +1,4 @@
-package com.roervik.tdt4100.gameproject.core.util;
+package com.roervik.tdt4100.gameproject.core.io.file;
 
 import java.io.BufferedReader;
 import java.io.IOException;

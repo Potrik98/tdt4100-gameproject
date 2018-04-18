@@ -1,4 +1,4 @@
-package com.roervik.tdt4100.gameproject.core.data;
+package com.roervik.tdt4100.gameproject.core.data.vertex;
 
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;

@@ -1,7 +1,7 @@
 package com.roervik.tdt4100.gameproject.core.entity;
 
-import com.roervik.tdt4100.gameproject.core.shaders.ProjectableShader;
-import com.roervik.tdt4100.gameproject.core.data.VertexArrayObject;
+import com.roervik.tdt4100.gameproject.core.gfx.shaders.ProjectableShader;
+import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.game.Renderable;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
 

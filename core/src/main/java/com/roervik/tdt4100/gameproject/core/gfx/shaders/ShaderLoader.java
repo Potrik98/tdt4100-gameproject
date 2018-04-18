@@ -1,7 +1,7 @@
-package com.roervik.tdt4100.gameproject.core.shaders;
+package com.roervik.tdt4100.gameproject.core.gfx.shaders;
 
 import com.roervik.tdt4100.gameproject.core.gfx.ShaderProgram;
-import com.roervik.tdt4100.gameproject.core.util.FileUtils;
+import com.roervik.tdt4100.gameproject.core.io.file.FileUtils;
 
 import java.io.IOException;
 

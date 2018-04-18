@@ -1,8 +1,8 @@
 package com.roervik.tdt4100.gameproject.core;
 
-import com.roervik.tdt4100.gameproject.core.data.VertexArrayObject;
+import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.gfx.ShaderProgram;
-import com.roervik.tdt4100.gameproject.core.shaders.ShaderLoader;
+import com.roervik.tdt4100.gameproject.core.gfx.shaders.ShaderLoader;
 
 public class TestGameRedSquare extends TestGame {
     private ShaderProgram shaderProgram;

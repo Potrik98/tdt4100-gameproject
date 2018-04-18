@@ -1,7 +1,6 @@
 package com.roervik.tdt4100.gameproject.core.io.file;
 
-import com.roervik.tdt4100.gameproject.core.data.VertexArrayObject;
-import com.roervik.tdt4100.gameproject.core.util.FileUtils;
+import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 

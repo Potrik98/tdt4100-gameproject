@@ -1,6 +1,6 @@
 package com.roervik.tdt4100.gameproject.core.gfx;
 
-import com.roervik.tdt4100.gameproject.core.shaders.ShaderException;
+import com.roervik.tdt4100.gameproject.core.gfx.shaders.ShaderException;
 
 import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;

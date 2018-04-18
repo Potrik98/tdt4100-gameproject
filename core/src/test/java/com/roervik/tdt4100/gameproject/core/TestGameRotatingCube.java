@@ -1,11 +1,11 @@
 package com.roervik.tdt4100.gameproject.core;
 
 import com.roervik.tdt4100.gameproject.core.io.file.OBJLoader;
-import com.roervik.tdt4100.gameproject.core.data.VertexArrayObject;
+import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.entity.ModelEntity;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
-import com.roervik.tdt4100.gameproject.core.shaders.ObjectShader;
-import com.roervik.tdt4100.gameproject.core.shaders.ShaderLoader;
+import com.roervik.tdt4100.gameproject.core.gfx.shaders.ObjectShader;
+import com.roervik.tdt4100.gameproject.core.gfx.shaders.ShaderLoader;
 import org.joml.Matrix4f;
 
 public class TestGameRotatingCube extends TestGame {
