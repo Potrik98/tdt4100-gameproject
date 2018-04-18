@@ -8,6 +8,8 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_DISABLED;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_2;
@@ -15,6 +17,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorEnterCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
@@ -38,6 +41,7 @@ public class Input {
     }
 
     public void init(final Window window) {
+        glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwSetCursorPosCallback(window.getWindowHandle(), new GLFWCursorPosCallback() {
             @Override
             public void invoke(long window, double xpos, double ypos) {
@@ -81,6 +85,14 @@ public class Input {
 
     public boolean isKeyPressed(final int keyCode) {
         return isKeyPressed[keyCode];
+    }
+
+    public Vector2f getCurrentMousePosition() {
+        return currentMousePosition;
+    }
+
+    public Vector2f getScrollVec() {
+        return scrollVec;
     }
 
     public boolean isLeftMouseButtonPressed() {

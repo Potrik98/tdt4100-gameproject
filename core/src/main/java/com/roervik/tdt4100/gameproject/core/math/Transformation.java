@@ -1,5 +1,6 @@
 package com.roervik.tdt4100.gameproject.core.math;
 
+import com.roervik.tdt4100.gameproject.core.gfx.Camera;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
@@ -21,6 +22,14 @@ public class Transformation {
 
     public static Matrix4f getOrthographicMatrix(float left, float right, float bottom, float top, float near, float far) {
         return new Matrix4f().identity().ortho(left, right, bottom, top, near, far);
+    }
+
+    public static Matrix4f getViewMatrix(Camera camera) {
+        return new Matrix4f().identity()
+                .rotateX(camera.getRotation().x)
+                .rotateY(camera.getRotation().y)
+                .rotateZ(camera.getRotation().z)
+                .translate(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
     }
 
     public static Matrix4f getModelMatrix(Vector3f position, Quaternionf rotation, Vector3f scale) {

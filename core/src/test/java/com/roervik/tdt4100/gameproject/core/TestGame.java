@@ -3,6 +3,7 @@ package com.roervik.tdt4100.gameproject.core;
 import com.roervik.tdt4100.gameproject.core.gfx.Window;
 import com.roervik.tdt4100.gameproject.core.game.GameLogicComponent;
 import com.roervik.tdt4100.gameproject.core.game.GameLoop;
+import com.roervik.tdt4100.gameproject.core.io.input.Controller;
 
 import static org.lwjgl.opengl.GL11.glClearColor;
 
@@ -17,7 +18,7 @@ public abstract class TestGame implements GameLogicComponent {
 
     public void init() {
         window.init();
-
+        Controller.initInputController(window);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
