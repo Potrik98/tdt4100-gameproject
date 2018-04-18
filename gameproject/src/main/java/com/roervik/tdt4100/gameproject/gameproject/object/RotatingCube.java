@@ -4,19 +4,12 @@ import com.roervik.tdt4100.gameproject.core.data.texture.Texture;
 import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
 import com.roervik.tdt4100.gameproject.core.entity.TexturedEntity;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.ProjectableShader;
-import com.roervik.tdt4100.gameproject.core.io.input.Controller;
-import com.roervik.tdt4100.gameproject.core.io.input.Input;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
 import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 
 public class RotatingCube extends TexturedEntity {
     public static final float size = 2.0f;
@@ -32,6 +25,8 @@ public class RotatingCube extends TexturedEntity {
     private Vector4f centerToEdgeTranslation;
     private Vector4f edgeToCenterTranslation;
 
+    private int tileX, tileZ;
+
     public RotatingCube(final VertexArrayObject model,
                         final Texture texture,
                         final ProjectableShader shaderProgram) {
@@ -45,11 +40,11 @@ public class RotatingCube extends TexturedEntity {
         rotationAxis = new Vector3f();
         baseRotation = new Quaternionf();
         basePosition = new Vector3f();
+        tileX = 0; tileZ = 0;
     }
 
     @Override
     public void update() {
-        handleInput();
         updateRotation();
         updatePosition();
         updateModelMatrix();
@@ -60,17 +55,6 @@ public class RotatingCube extends TexturedEntity {
         texture.bind();
         shaderProgram.setModelMatrix(modelMatrix);
         model.render();
-    }
-
-    public void handleInput() {
-        final Input input = Controller.getInput();
-
-        if (!isRotating) {
-            if (input.isKeyPressed(GLFW_KEY_W)) startRotation(new Vector3f(1, 0, 0));
-            if (input.isKeyPressed(GLFW_KEY_A)) startRotation(new Vector3f(0, 0, 1));
-            if (input.isKeyPressed(GLFW_KEY_S)) startRotation(new Vector3f(-1, 0, 0));
-            if (input.isKeyPressed(GLFW_KEY_D)) startRotation(new Vector3f(0, 0, -1));
-        }
     }
 
     public boolean isRotating() {

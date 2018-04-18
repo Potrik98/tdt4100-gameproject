@@ -15,6 +15,8 @@ import com.roervik.tdt4100.gameproject.gameproject.map.BoardMap;
 import com.roervik.tdt4100.gameproject.gameproject.map.MapBuilder;
 import com.roervik.tdt4100.gameproject.gameproject.object.RotatingCube;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.glClearColor;
@@ -62,10 +64,13 @@ public class Game implements GameLogicComponent {
         final VertexArrayObject vertexArrayObject = OBJLoader.loadModelFromObjFile("models/cube.obj");
 
         rotatingCube = new RotatingCube(vertexArrayObject, Texture.fromResource("textures/scales.png"), shaderProgram);
-        rotatingCube.position.z = -10;
+        final Vector2f startingPosition = boardMap.getStartingPosition();
+        rotatingCube.position = new Vector3f(startingPosition.x, -0.5f, startingPosition.y).mul(RotatingCube.size);
+        boardMap.setRotatingCube(rotatingCube);
     }
 
     public void update() {
+        boardMap.update();
         rotatingCube.update();
         camera.update(rotatingCube.position);
     }

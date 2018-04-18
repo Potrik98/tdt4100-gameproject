@@ -28,7 +28,7 @@ public class ArchBallCamera extends Camera {
         super();
         this.windowHandle = windowHandle;
         distance = 25.0f;
-        pitch = (float) (Math.PI / 6.0f);
+        pitch = (float) (-Math.PI);
         theta = 0.0f;
         lastMousePosition = new Vector2f();
 
@@ -45,11 +45,11 @@ public class ArchBallCamera extends Camera {
             Vector2f mouseDelta = new Vector2f();
             currentMousePosition.sub(lastMousePosition, mouseDelta);
             lastMousePosition = currentMousePosition;
-            pitch += mouseDelta.y * MOUSE_SENSITIVITY_VERTICAL;
-            theta += mouseDelta.x * MOUSE_SENSITIVITY_HORIZONTAL;
+            pitch -= mouseDelta.y * MOUSE_SENSITIVITY_VERTICAL;
+            theta -= mouseDelta.x * MOUSE_SENSITIVITY_HORIZONTAL;
 
-            if (pitch < 0) pitch = 0;
-            else if (pitch > Math.PI / 2) pitch = (float) (Math.PI / 2);
+            if (pitch > 0) pitch = 0;
+            else if (pitch < -Math.PI) pitch = (float) (-Math.PI);
         }
 
         rotation.y = (float) (Math.PI + theta);
