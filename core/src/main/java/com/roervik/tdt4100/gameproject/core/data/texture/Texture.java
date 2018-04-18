@@ -29,8 +29,8 @@ public class Texture {
 
     protected final int textureId;
 
-    public Texture(final String imageResource)  {
-        this(loadTexture(imageResource));
+    public static Texture fromResource(final String imageResource) {
+        return new Texture(loadTexture(imageResource));
     }
 
     protected Texture(final int textureId) {

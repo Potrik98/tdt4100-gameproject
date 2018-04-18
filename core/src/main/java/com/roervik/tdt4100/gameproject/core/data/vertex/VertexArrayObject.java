@@ -1,5 +1,10 @@
 package com.roervik.tdt4100.gameproject.core.data.vertex;
 
+import org.lwjgl.opengl.GL20;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
@@ -18,12 +23,15 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public class VertexArrayObject {
     private final IndexBuffer indexBuffer;
     private final int vertexArrayObjectId;
+    private final Set<Integer> locations;
 
     public static class VertexArrayObjectBuilder {
         private final int vertexArrayObjectId;
         private IndexBuffer indexBuffer;
+        private Set<Integer> locations;
 
         public VertexArrayObjectBuilder() {
+            locations = new HashSet<>();
             vertexArrayObjectId = glGenVertexArrays();
             glBindVertexArray(vertexArrayObjectId);
         }
@@ -41,6 +49,7 @@ public class VertexArrayObject {
         public VertexArrayObjectBuilder vertexBuffer(final float[] vertexData,
                                                      final int componentCount,
                                                      final int location) {
+            locations.add(location);
             final int vertexBufferId = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
             glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
@@ -50,7 +59,7 @@ public class VertexArrayObject {
         }
 
         public VertexArrayObject build() {
-            return new VertexArrayObject(vertexArrayObjectId, indexBuffer);
+            return new VertexArrayObject(vertexArrayObjectId, indexBuffer, locations);
         }
     }
 
@@ -59,17 +68,19 @@ public class VertexArrayObject {
     }
 
     private VertexArrayObject(final int vertexArrayObjectId,
-                              final IndexBuffer indexBuffer) {
+                              final IndexBuffer indexBuffer,
+                              final Set<Integer> locations) {
         this.vertexArrayObjectId = vertexArrayObjectId;
         this.indexBuffer = indexBuffer;
+        this.locations = locations;
     }
 
     public void render() {
         glBindVertexArray(vertexArrayObjectId);
         indexBuffer.bind();
-        glEnableVertexAttribArray(0);
+        locations.forEach(GL20::glEnableVertexAttribArray);
         glDrawElements(GL_TRIANGLES, indexBuffer.vertexCount, GL_UNSIGNED_INT, 0);
-        glDisableVertexAttribArray(0);
+        locations.forEach(GL20::glDisableVertexAttribArray);
         glBindVertexArray(0);
     }
 }
