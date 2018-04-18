@@ -46,23 +46,7 @@ public class Game implements GameLogicComponent {
         projectionMatrix = Transformation.getProjectionMatrix((float) Math.toRadians(FOV), width, height, 0.1f, 100.0f);
     }
 
-    public void init() {
-        window.init();
-        Controller.initInputController(window);
-        glEnable(GL_DEPTH_TEST);
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-        camera = new ArchBallCamera(window.getWindowHandle());
-
-        shaderProgram = new TexturedShader(ShaderLoader.createShaderProgramFromResources(
-                "shaders/TexturedVertexShader.glsl",
-                "shaders/TexturedFragmentShader.glsl"));
-
-        cubeMapShader = new TexturedShader(ShaderLoader.createShaderProgramFromResources(
-                "shaders/CubemapVertexShader.glsl",
-                "shaders/CubemapFragmentShader.glsl"
-        ));
-
+    private void reset() {
         boardMap = MapBuilder.ofResource("maps/map1.txt")
                 .withShader(shaderProgram)
                 .withTexture(Texture.fromResource("textures/ground.png"))
@@ -81,6 +65,26 @@ public class Game implements GameLogicComponent {
         final Vector2f startingPosition = boardMap.getStartingPosition();
         rotatingCube.position = new Vector3f(startingPosition.x, -0.5f, startingPosition.y).mul(RotatingCube.size);
         boardMap.setRotatingCube(rotatingCube);
+    }
+
+    public void init() {
+        window.init();
+        Controller.initInputController(window);
+        glEnable(GL_DEPTH_TEST);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+        camera = new ArchBallCamera(window.getWindowHandle());
+
+        shaderProgram = new TexturedShader(ShaderLoader.createShaderProgramFromResources(
+                "shaders/TexturedVertexShader.glsl",
+                "shaders/TexturedFragmentShader.glsl"));
+
+        cubeMapShader = new TexturedShader(ShaderLoader.createShaderProgramFromResources(
+                "shaders/CubemapVertexShader.glsl",
+                "shaders/CubemapFragmentShader.glsl"
+        ));
+
+        reset();
     }
 
     public void update() {

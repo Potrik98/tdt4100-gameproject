@@ -77,33 +77,33 @@ public class BoardMap extends Map {
     private void rollForwards() {
         rotatingCube.startRotation(new Vector3f(1, 0, 0));
         if (currentSide == CubeSide.UP) currentSide = CubeSide.BACK;
-        if (currentSide == CubeSide.FRONT) currentSide = CubeSide.UP;
-        if (currentSide == CubeSide.DOWN) currentSide = CubeSide.FRONT;
-        if (currentSide == CubeSide.BACK) currentSide = CubeSide.DOWN;
+        else if (currentSide == CubeSide.BACK) currentSide = CubeSide.DOWN;
+        else if (currentSide == CubeSide.DOWN) currentSide = CubeSide.FRONT;
+        else if (currentSide == CubeSide.FRONT) currentSide = CubeSide.UP;
     }
 
     private void rollBackWards() {
         rotatingCube.startRotation(new Vector3f(-1, 0, 0));
         if (currentSide == CubeSide.UP) currentSide = CubeSide.FRONT;
-        if (currentSide == CubeSide.FRONT) currentSide = CubeSide.DOWN;
-        if (currentSide == CubeSide.DOWN) currentSide = CubeSide.BACK;
-        if (currentSide == CubeSide.BACK) currentSide = CubeSide.UP;
+        else if (currentSide == CubeSide.FRONT) currentSide = CubeSide.DOWN;
+        else if (currentSide == CubeSide.DOWN) currentSide = CubeSide.BACK;
+        else if (currentSide == CubeSide.BACK) currentSide = CubeSide.UP;
     }
 
     private void rollLeft() {
         rotatingCube.startRotation(new Vector3f(0, 0, -1));
         if (currentSide == CubeSide.UP) currentSide = CubeSide.LEFT;
-        if (currentSide == CubeSide.LEFT) currentSide = CubeSide.DOWN;
-        if (currentSide == CubeSide.DOWN) currentSide = CubeSide.RIGHT;
-        if (currentSide == CubeSide.RIGHT) currentSide = CubeSide.UP;
+        else if (currentSide == CubeSide.LEFT) currentSide = CubeSide.DOWN;
+        else if (currentSide == CubeSide.DOWN) currentSide = CubeSide.RIGHT;
+        else if (currentSide == CubeSide.RIGHT) currentSide = CubeSide.UP;
     }
 
     private void rollRight() {
         rotatingCube.startRotation(new Vector3f(0, 0, 1));
         if (currentSide == CubeSide.UP) currentSide = CubeSide.RIGHT;
-        if (currentSide == CubeSide.RIGHT) currentSide = CubeSide.DOWN;
-        if (currentSide == CubeSide.DOWN) currentSide = CubeSide.LEFT;
-        if (currentSide == CubeSide.LEFT) currentSide = CubeSide.UP;
+        else if (currentSide == CubeSide.RIGHT) currentSide = CubeSide.DOWN;
+        else if (currentSide == CubeSide.DOWN) currentSide = CubeSide.LEFT;
+        else if (currentSide == CubeSide.LEFT) currentSide = CubeSide.UP;
     }
 
     private void attemptMove(int dx, int dz) {
