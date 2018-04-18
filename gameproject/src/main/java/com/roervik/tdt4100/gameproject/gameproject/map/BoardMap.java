@@ -20,6 +20,7 @@ public class BoardMap extends Map {
     private final int width, height;
     private final TileType[] mapData;
     private Vector2i currentTile;
+    private CubeSide currentSide;
 
     protected BoardMap(final TexturedEntity mapEntity, final int width, final int height, final TileType[] mapData) {
         super(mapEntity);
@@ -28,6 +29,11 @@ public class BoardMap extends Map {
         this.height = height;
         this.mapData = mapData;
         currentTile = getStartingTile();
+        currentSide = CubeSide.UP;
+    }
+
+    private enum CubeSide {
+        UP, DOWN, LEFT, RIGHT, FRONT, BACK;
     }
 
     public void setRotatingCube(final RotatingCube rotatingCube) {
@@ -57,14 +63,55 @@ public class BoardMap extends Map {
 
     public void update() {
         handleInput();
+        checkBoardState();
+    }
+
+    private void checkBoardState() {
+        if (!rotatingCube.isRotating()) {
+            if (mapData[currentTile.x + currentTile.y * width] == TileType.GOAL && currentSide == CubeSide.DOWN) {
+                System.out.println("Victory!");
+            }
+        }
+    }
+
+    private void rollForwards() {
+        rotatingCube.startRotation(new Vector3f(1, 0, 0));
+        if (currentSide == CubeSide.UP) currentSide = CubeSide.BACK;
+        if (currentSide == CubeSide.FRONT) currentSide = CubeSide.UP;
+        if (currentSide == CubeSide.DOWN) currentSide = CubeSide.FRONT;
+        if (currentSide == CubeSide.BACK) currentSide = CubeSide.DOWN;
+    }
+
+    private void rollBackWards() {
+        rotatingCube.startRotation(new Vector3f(-1, 0, 0));
+        if (currentSide == CubeSide.UP) currentSide = CubeSide.FRONT;
+        if (currentSide == CubeSide.FRONT) currentSide = CubeSide.DOWN;
+        if (currentSide == CubeSide.DOWN) currentSide = CubeSide.BACK;
+        if (currentSide == CubeSide.BACK) currentSide = CubeSide.UP;
+    }
+
+    private void rollLeft() {
+        rotatingCube.startRotation(new Vector3f(0, 0, -1));
+        if (currentSide == CubeSide.UP) currentSide = CubeSide.LEFT;
+        if (currentSide == CubeSide.LEFT) currentSide = CubeSide.DOWN;
+        if (currentSide == CubeSide.DOWN) currentSide = CubeSide.RIGHT;
+        if (currentSide == CubeSide.RIGHT) currentSide = CubeSide.UP;
+    }
+
+    private void rollRight() {
+        rotatingCube.startRotation(new Vector3f(0, 0, 1));
+        if (currentSide == CubeSide.UP) currentSide = CubeSide.RIGHT;
+        if (currentSide == CubeSide.RIGHT) currentSide = CubeSide.DOWN;
+        if (currentSide == CubeSide.DOWN) currentSide = CubeSide.LEFT;
+        if (currentSide == CubeSide.LEFT) currentSide = CubeSide.UP;
     }
 
     private void attemptMove(int dx, int dz) {
         if (canMoveToTile(currentTile.x + dx, currentTile.y + dz)) {
-            if (dx == 0 && dz == -1) rotatingCube.startRotation(new Vector3f(1, 0, 0));
-            if (dx == 1 && dz == 0) rotatingCube.startRotation(new Vector3f(0, 0, 1));
-            if (dx == 0 && dz == 1) rotatingCube.startRotation(new Vector3f(-1, 0, 0));
-            if (dx == -1 && dz == 0) rotatingCube.startRotation(new Vector3f(0, 0, -1));
+            if (dx == 0 && dz == -1) rollForwards();
+            if (dx == 1 && dz == 0) rollRight();
+            if (dx == 0 && dz == 1) rollBackWards();
+            if (dx == -1 && dz == 0) rollLeft();
             currentTile.add(dx, dz);
         }
     }
