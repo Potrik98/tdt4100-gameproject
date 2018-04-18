@@ -2,12 +2,11 @@ package com.roervik.tdt4100.gameproject.gameproject.object;
 
 import com.roervik.tdt4100.gameproject.core.data.texture.Texture;
 import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
-import com.roervik.tdt4100.gameproject.core.entity.ModelEntity;
 import com.roervik.tdt4100.gameproject.core.entity.TexturedEntity;
+import com.roervik.tdt4100.gameproject.core.gfx.shaders.ProjectableShader;
 import com.roervik.tdt4100.gameproject.core.io.input.Controller;
 import com.roervik.tdt4100.gameproject.core.io.input.Input;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
-import com.roervik.tdt4100.gameproject.core.gfx.shaders.ProjectableShader;
 import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -20,7 +19,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 
 public class RotatingCube extends TexturedEntity {
-    private static final float size = 2.0f;
+    public static final float size = 2.0f;
     private static final float rotationSpeed = 0.02f;
 
     private float rotationProgress;

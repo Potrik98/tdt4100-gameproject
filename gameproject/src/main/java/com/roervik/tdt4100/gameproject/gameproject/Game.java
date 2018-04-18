@@ -2,17 +2,17 @@ package com.roervik.tdt4100.gameproject.gameproject;
 
 import com.roervik.tdt4100.gameproject.core.data.texture.Texture;
 import com.roervik.tdt4100.gameproject.core.data.vertex.VertexArrayObject;
-import com.roervik.tdt4100.gameproject.core.gfx.Camera;
-import com.roervik.tdt4100.gameproject.core.gfx.Window;
 import com.roervik.tdt4100.gameproject.core.game.GameLogicComponent;
 import com.roervik.tdt4100.gameproject.core.game.GameLoop;
+import com.roervik.tdt4100.gameproject.core.gfx.Window;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.ArchBallCamera;
-import com.roervik.tdt4100.gameproject.core.gfx.shaders.ObjectShader;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.ShaderLoader;
 import com.roervik.tdt4100.gameproject.core.gfx.shaders.TexturedShader;
 import com.roervik.tdt4100.gameproject.core.io.file.OBJLoader;
 import com.roervik.tdt4100.gameproject.core.io.input.Controller;
 import com.roervik.tdt4100.gameproject.core.math.Transformation;
+import com.roervik.tdt4100.gameproject.gameproject.map.BoardMap;
+import com.roervik.tdt4100.gameproject.gameproject.map.MapBuilder;
 import com.roervik.tdt4100.gameproject.gameproject.object.RotatingCube;
 import org.joml.Matrix4f;
 
@@ -35,6 +35,8 @@ public class Game implements GameLogicComponent {
     private Matrix4f projectionMatrix;
     private ArchBallCamera camera;
 
+    private BoardMap boardMap;
+
     public Game() {
         window = new Window(title, width, height);
         projectionMatrix = Transformation.getProjectionMatrix((float) Math.toRadians(FOV), width, height, 0.1f, 100.0f);
@@ -51,6 +53,11 @@ public class Game implements GameLogicComponent {
         shaderProgram = new TexturedShader(ShaderLoader.createShaderProgramFromResources(
                 "shaders/TexturedVertexShader.glsl",
                 "shaders/TexturedFragmentShader.glsl"));
+
+        boardMap = MapBuilder.ofResource("maps/map1.txt")
+                .withShader(shaderProgram)
+                .withTexture(Texture.fromResource("textures/ground.png"))
+                .build();
 
         final VertexArrayObject vertexArrayObject = OBJLoader.loadModelFromObjFile("models/cube.obj");
 
@@ -69,6 +76,7 @@ public class Game implements GameLogicComponent {
         shaderProgram.setProjectionMatrix(projectionMatrix);
         shaderProgram.setViewMatrix(Transformation.getViewMatrix(camera));
         rotatingCube.render();
+        boardMap.render();
         window.update();
     }
 
