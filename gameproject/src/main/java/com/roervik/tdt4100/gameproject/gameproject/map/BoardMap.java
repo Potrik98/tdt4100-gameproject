@@ -21,6 +21,7 @@ public class BoardMap extends Map {
     private final TileType[] mapData;
     private Vector2i currentTile;
     private CubeSide currentSide;
+    private boolean completed;
 
     protected BoardMap(final TexturedEntity mapEntity, final int width, final int height, final TileType[] mapData) {
         super(mapEntity);
@@ -30,10 +31,15 @@ public class BoardMap extends Map {
         this.mapData = mapData;
         currentTile = getStartingTile();
         currentSide = CubeSide.UP;
+        completed = false;
     }
 
     private enum CubeSide {
         UP, DOWN, LEFT, RIGHT, FRONT, BACK;
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 
     public void setRotatingCube(final RotatingCube rotatingCube) {
@@ -67,8 +73,9 @@ public class BoardMap extends Map {
     }
 
     private void checkBoardState() {
-        if (!rotatingCube.isRotating()) {
+        if (!rotatingCube.isRotating() && !completed) {
             if (mapData[currentTile.x + currentTile.y * width] == TileType.GOAL && currentSide == CubeSide.DOWN) {
+                completed = true;
                 System.out.println("Victory!");
             }
         }

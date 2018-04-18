@@ -41,13 +41,16 @@ public class Game implements GameLogicComponent {
 
     private BoardMap boardMap;
 
+    private int mapCounter = 0;
+
     public Game() {
         window = new Window(title, width, height);
         projectionMatrix = Transformation.getProjectionMatrix((float) Math.toRadians(FOV), width, height, 0.1f, 100.0f);
     }
 
     private void reset() {
-        boardMap = MapBuilder.ofResource("maps/map1.txt")
+        System.out.println("loading map " + mapCounter);
+        boardMap = MapBuilder.ofResource("maps/map" + mapCounter++ + ".txt")
                 .withShader(shaderProgram)
                 .withTexture(Texture.fromResource("textures/ground.png"))
                 .build();
@@ -91,6 +94,8 @@ public class Game implements GameLogicComponent {
         boardMap.update();
         rotatingCube.update();
         camera.update(rotatingCube.position);
+        if (boardMap.isCompleted())
+            reset();
     }
 
     public void render() {
